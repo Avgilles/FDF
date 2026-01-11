@@ -13,4 +13,5 @@ How to compile :
 
 ## Resources
 
+[Awesome 42 ressource](https://42-cursus.gitbook.io/guide/2-rank-02/fdf)
 [Awesome 42 ressource](https://medium.com/@amehri_tarik/fdf-42-a-detailed-walkthrough-7184cca317fc)

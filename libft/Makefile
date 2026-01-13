@@ -57,6 +57,11 @@ clean:
 
 fclean: clean
 	rm -f $(NAME)
+	rm -f $(NAME:.a=.out)
+
 re: fclean all
+
+run: re 
+	$(CC) $(CFLAGS) ./test/main.c -L. -lft -I./include -o $(NAME:.a=.out)
 
 .PHONY: all clean fclean re

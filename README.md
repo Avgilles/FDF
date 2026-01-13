@@ -10,7 +10,6 @@
 
 How to compile :
 
-
 ## Resources
 
 [Awesome 42 ressource](https://42-cursus.gitbook.io/guide/2-rank-02/fdf)

@@ -1,6 +1,6 @@
 NAME=ft_printf.a
-INCLUDES=../include
-OBJS_DIR=../obj/
+INCLUDES=./include
+BUILDDIR=./build
 CC=cc
 CFLAGS=-Wall -Wextra -Werror -c
 SRCS_FILES = ft_printf \
@@ -11,21 +11,21 @@ SRCS_FILES = ft_printf \
 				ft_print_str \
 				ft_putnbr
 
-OBJS = $(addprefix $(OBJS_DIR), $(SRCS:.c=.o))
+OBJS = $(addprefix $(BUILDDIR), $(SRCS:.c=.o))
 
 all: $(NAME)
 
 $(NAME):$(OBJS)
 	ar -rcs $@ $^
 
-$(OBJS_DIR)%.o: %.c | $(OBJS_DIR)
+$(BUILDDIR)%.o: %.c | $(BUILDDIR)
 	$(CC) $(CFLAGS) -I$(INCLUDES) $< -o $@
 
-$(OBJS_DIR):
-	mkdir -p $(OBJS_DIR)
+$(BUILDDIR):
+	mkdir -p $(BUILDDIR)
 
 clean:
-	rm -rf $(OBJS_DIR)
+	rm -rf $(BUILDDIR)
 
 fclean: clean
 	rm -f $(NAME)

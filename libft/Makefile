@@ -1,58 +1,59 @@
 NAME=libft.a
-INCLUDES=../include
-OBJS_DIR=../obj/
+INCLUDES=./include
+SRCDIR=./src
+BUILDDIR=./build/
 CC=cc
 CFLAGS=-Wall -Wextra -Werror -c
-SRCS = ft_isdigit.c \
-        ft_isalpha.c \
-        ft_isalnum.c \
-        ft_strlen.c \
-        ft_isprint.c \
-		ft_isascii.c \
-        ft_memcpy.c \
-        ft_memmove.c \
-		ft_memchr.c \
-        ft_memset.c \
-        ft_memcmp.c \
-        ft_bzero.c \
-        ft_calloc.c \
-		ft_strdup.c \
-		ft_atoi.c \
-		ft_strncmp.c \
-		ft_toupper.c \
-		ft_tolower.c \
-		ft_strlcat.c \
-		ft_strnstr.c \
-		ft_strchr.c \
-		ft_strrchr.c \
-		ft_strlcpy.c \
-		ft_substr.c \
-		ft_strjoin.c \
-		ft_strtrim.c \
-		ft_split.c \
-		ft_itoa.c \
-		ft_strmapi.c \
-		ft_striteri.c \
-		ft_putchar_fd.c \
-		ft_putstr_fd.c \
-		ft_putendl_fd.c \
-		ft_putnbr_fd.c
+SRCS = ft_isdigit \
+        ft_isalpha \
+        ft_isalnum \
+        ft_strlen \
+        ft_isprint \
+		ft_isascii \
+        ft_memcpy \
+        ft_memmove \
+		ft_memchr \
+        ft_memset \
+        ft_memcmp \
+        ft_bzero \
+        ft_calloc \
+		ft_strdup \
+		ft_atoi \
+		ft_strncmp \
+		ft_toupper \
+		ft_tolower \
+		ft_strlcat \
+		ft_strnstr \
+		ft_strchr \
+		ft_strrchr \
+		ft_strlcpy \
+		ft_substr \
+		ft_strjoin \
+		ft_strtrim \
+		ft_split \
+		ft_itoa \
+		ft_strmapi \
+		ft_striteri \
+		ft_putchar_fd \
+		ft_putstr_fd \
+		ft_putendl_fd \
+		ft_putnbr_fd
 
-OBJS = $(addprefix $(OBJS_DIR), $(SRCS:.c=.o))
+OBJS = $(addprefix $(BUILDDIR), $(addsuffix .o, $(SRCS)))
 
 all: $(NAME)
 
 $(NAME):$(OBJS)
 	ar -rcs $@ $^
 
-$(OBJS_DIR)%.o: %.c | $(OBJS_DIR)
+$(BUILDDIR)%.o: $(SRCDIR)/%.c | $(BUILDDIR)
 	$(CC) $(CFLAGS) -I$(INCLUDES) $< -o $@
 
-$(OBJS_DIR):
-	mkdir -p $(OBJS_DIR)
+$(BUILDDIR):
+	mkdir -p $@
 
 clean:
-	rm -rf $(OBJS_DIR)
+	rm -rf $(BUILDDIR)
 
 fclean: clean
 	rm -f $(NAME)

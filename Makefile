@@ -1,50 +1,73 @@
-NAME = libftprintf.a
+
+NAME = fdf
 CC = cc
-CFLAGS = -Wall -Wextra -Werror 
+# CFLAGS = -Wall -Wextra -Werror
+CFLAGS = 
 
-LIBFT = libft
-INCLUDES = include
-SRCS_DIR = printf/
-OBJS_DIR = obj/
+INCLUDES = -Iinclude -Ilibs/libft_printf/include -Ilibs/gnl/include -Ilibs/minilibx
 
-SRCS_FILES = ft_printf \
-				ft_print_hex \
-				ft_print_unsigned \
-				ft_print_char \
-				ft_print_ptr \
-				ft_print_str \
-				ft_putnbr
-				
 
-SRC = $(addprefix $(SRCS_DIR), $(addsuffix .c, $(SRCS_FILES)))
-OBJ = $(addprefix $(OBJS_DIR), $(addsuffix .o, $(SRCS_FILES)))
+LIBFT_PRINTF_DIR = libs/libft_printf
+LIBFT_PRINTF = $(LIBFT_PRINTF_DIR)/libft_printf.a
 
+GNL_DIR = libs/gnl
+GNL = $(GNL_DIR)/gnl.a
+
+MLX_DIR = libs/minilibx
+MLX = $(MLX_DIR)/libmlx.a
+MLX_FLAGS = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lz
+
+SRCDIR = src
+BUILDDIR = build/
+
+SRCS = main.c
+
+OBJS = $(addprefix $(BUILDDIR), $(SRCS:.c=.o))
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	make -C $(LIBFT)
-	cp $(LIBFT)/libft.a $(NAME)
-	ar rcs $(NAME) $(OBJ)
+$(LIBFT_PRINTF):
+	@echo "Compiling libft_printf..."
+	@make -C $(LIBFT_PRINTF_DIR)
 
-$(OBJS_DIR):
-	mkdir -p $(OBJS_DIR)
+$(GNL):
+	@echo "Compiling gnl..."
+	@make -C $(GNL_DIR)
 
-$(OBJS_DIR)%.o: $(SRCS_DIR)%.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -I$(INCLUDES) -c $< -o $@
+$(MLX):
+	@echo "Compiling minilibx..."
+	@cd $(MLX_DIR) && ./configure
+
+$(NAME): $(LIBFT_PRINTF) $(GNL) $(MLX) $(OBJS)
+	@echo "Linking $(NAME)..."
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT_PRINTF) $(GNL) $(MLX_FLAGS) -o $(NAME)
+	@echo "✓ $(NAME) compiled successfully!"
+
+$(BUILDDIR)%.o: $(SRCDIR)/%.c | $(BUILDDIR)
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+$(BUILDDIR):
+	@mkdir -p $(BUILDDIR)
 
 clean:
-	make -C $(LIBFT) clean
-	rm -rf $(OBJS_DIR)
+	@make -C $(LIBFT_PRINTF_DIR) clean
+	@make -C $(GNL_DIR) clean
+	@cd $(MLX_DIR) && make clean 2>/dev/null || true
+	@rm -rf $(BUILDDIR)
+	@echo "✓ Object files cleaned"
 
 fclean: clean
-	make -C $(LIBFT) fclean
-	rm -f $(NAME) a.out
+	@make -C $(LIBFT_PRINTF_DIR) fclean
+	@make -C $(GNL_DIR) fclean
+	@rm -f $(NAME)
+	@echo "✓ $(NAME) cleaned"
+
 re: fclean all
 
-run: re
-	$(CC) -I$(INCLUDES) $(SRCS_DIR)_main.c $(NAME) -o a.out
-	clear
-	./a.out
+
+run: $(NAME)
+	@clear
+	@./$(NAME)
 
 .PHONY: all clean fclean re run
